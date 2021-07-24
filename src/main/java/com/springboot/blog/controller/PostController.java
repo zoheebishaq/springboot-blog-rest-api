@@ -30,7 +30,7 @@ public class PostController {
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     ) {
-        return postService.getAllPosts();
+        return postService.getAllPosts(pageNo,pageSize);
     }
 
     //get post by id
