@@ -1,7 +1,6 @@
 package com.springboot.blog.controller;
 
 import com.springboot.blog.dto.CommentDto;
-
 import com.springboot.blog.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +19,20 @@ public class CommentController {
     }
 
     @PostMapping("/posts/{postId}/comments")
-    public ResponseEntity<CommentDto> createComment(@PathVariable(value = "postId")long postId,
-                                                    @RequestBody CommentDto commentDto){
-        return new ResponseEntity<>(commentService.createComment(postId,commentDto), HttpStatus.CREATED);
+    public ResponseEntity<CommentDto> createComment(@PathVariable(value = "postId") long postId,
+                                                    @RequestBody CommentDto commentDto) {
+        return new ResponseEntity<>(commentService.createComment(postId, commentDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/posts/{postId}/comments")
-    public List<CommentDto> getCommentsByPostId(@PathVariable(value = "postId")Long postId){
+    public List<CommentDto> getCommentsByPostId(@PathVariable(value = "postId") Long postId) {
         return commentService.getCommentsByPostId(postId);
+    }
+
+    @GetMapping("/posts/{postId}/comments/{id}")
+    public ResponseEntity<CommentDto> getCommentsById(@PathVariable(value = "postId") Long postId, @PathVariable(value = "id") Long commentId) {
+        CommentDto commentDto = commentService.getCommentsById(postId,commentId);
+        return new ResponseEntity<>(commentDto,HttpStatus.OK);
     }
 
 }
