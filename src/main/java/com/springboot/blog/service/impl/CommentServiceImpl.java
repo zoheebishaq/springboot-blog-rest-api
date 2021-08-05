@@ -65,8 +65,10 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
 
-        if (!comment.getPost().getId().equals(post.getId()))
+        if (!comment.getPost().getId().equals(post.getId())){
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "comment does not belong to post");
+        }
+
 
         return mapToDTO(comment);
     }
@@ -81,8 +83,10 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
 
-        if (!comment.getPost().getId().equals(post.getId()))
+        if (!comment.getPost().getId().equals(post.getId())){
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment does not belong to post");
+        }
+
 
         comment.setName(commentRequest.getName());
         comment.setBody(commentRequest.getBody());
@@ -93,6 +97,23 @@ public class CommentServiceImpl implements CommentService {
          Comment updatedComment = commentRepository.save(comment);
          return mapToDTO(updatedComment);
     }
+
+    @Override
+    public void deleteComment(long postId, long commentId) {
+        //retrieve post entity by Id
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+
+        //retrieve comment by Id
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
+
+        if (!comment.getPost().getId().equals(post.getId())){
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment does not belong to post");
+        }
+        commentRepository.delete(comment);
+    }
+
 
     //convert Entity to DTO
     private CommentDto mapToDTO(Comment comment) {
